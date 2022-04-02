@@ -6,6 +6,7 @@
 struct Polygon
 {
   float v[3];
+  int n_vertex;
 } pvertex[MAXVERTEXS];
 
 

@@ -1,5 +1,6 @@
 #include "../include/window.h"
 #include "../include/polygon.h"
+#include "../include/window_callback.h"
 
 Window::Window(const char* title, int argc, char** argv) : _title(title), _argc(argc), _argv(argv)
 {
@@ -45,10 +46,6 @@ void Window::args()
       _doubleBuffer = GL_TRUE;
     }
   }
-}
-
-void circulo(float r, float ang, float pp[3])
-{
 }
 
 void Window::init()
@@ -102,6 +99,7 @@ void Window::drawPolygon()
   glEnd();
 }
 
+
 void Window::display()
 {
   glClearColor(1.0, 1.0, 1.0, 0.0);
@@ -136,17 +134,72 @@ void Window::reshape(int width, int height)
   glMatrixMode(GL_MODELVIEW);
 }
 
-Window* g_CurrentInstance;
-
-extern "C"
-void drawCallback()
+void Window::keyboard(unsigned char key, int x, int y)
 {
-  g_CurrentInstance->display();
+  switch (key)
+  {
+  case 27:
+    exit(0);
+  }
 }
 
-extern "C"
-void reshapeCallback(int width, int height) {
-  g_CurrentInstance->reshape(width, height);
+
+void Window::handleMenuEvents(int option)
+{
+  switch (option)
+  {
+  case 1:
+    if (_polygonType == GL_LINE)
+      _polygonType = GL_FILL;
+    else
+      _polygonType = GL_LINE;
+    break;
+  case 5:
+    init();
+    break;
+  }
+    glutPostRedisplay();
+}
+
+void Window::handleSubMenu1Events(int option)
+{
+  if (option == 0)
+    _polygonType = GL_POINTS;
+  else if (option == 1)
+  {
+    _polygonType = GL_LINE_LOOP;
+    _hasPolygon = true;
+  }
+
+  glutPostRedisplay();
+}
+
+void Window::handleSubMenu2Events(int option)
+{
+  _gOperation = option;
+  glutPostRedisplay();
+}
+
+
+void Window::createGLUTMenus()
+{
+  int menu, submenu1, submenu2;
+
+  submenu1 = glutCreateMenu(handleSubMenu1EventsCallback);
+  glutAddMenuEntry("Pontos", 0);
+  glutAddMenuEntry("Poligono", 1);
+
+  submenu2 = glutCreateMenu(handleSubMenu2EventsCallback);
+  glutAddMenuEntry("Translacao", 1);
+  glutAddMenuEntry("Rotacao", 2);
+  glutAddMenuEntry("Escala", 3);
+  glutAddMenuEntry("Cisalhamento", 4);
+
+  menu = glutCreateMenu(handleMenuEventsCallback);
+  glutAddMenuEntry("Limpar", 5);
+  glutAddSubMenu("Objetos", submenu1);
+  glutAddSubMenu("Transformacoes", submenu2);
+  glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
 void Window::render()
@@ -156,6 +209,10 @@ void Window::render()
   g_CurrentInstance = this;
   glutReshapeFunc(reshapeCallback);
   glutDisplayFunc(drawCallback);
+  glutKeyboardFunc(keyboardCallback);
+
+  createGLUTMenus();
+
   glutMainLoop();
 }
 

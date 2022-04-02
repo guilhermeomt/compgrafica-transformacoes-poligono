@@ -1,0 +1,35 @@
+#ifndef __WINDOW_CALLBACK_H__
+#define __WINDOW_CALLBACK_H__
+
+Window* g_CurrentInstance;
+
+extern "C"
+void drawCallback()
+{
+  g_CurrentInstance->display();
+}
+
+extern "C"
+void reshapeCallback(int width, int height) {
+  g_CurrentInstance->reshape(width, height);
+}
+
+extern "C"
+void keyboardCallback(unsigned char key, int x, int y) {
+  g_CurrentInstance->keyboard(key, x ,y);
+}
+
+extern "C"
+void handleMenuEventsCallback(int option) {
+  g_CurrentInstance->handleMenuEvents(option);
+}
+
+extern "C"
+void handleSubMenu1EventsCallback(int option) {
+  g_CurrentInstance->handleSubMenu1Events(option);
+}
+extern "C"
+void handleSubMenu2EventsCallback(int option) {
+  g_CurrentInstance->handleSubMenu2Events(option);
+}
+#endif // __WINDOW_CALLBACK_H__
