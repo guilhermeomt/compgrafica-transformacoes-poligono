@@ -4,8 +4,7 @@
 Window* g_CurrentInstance;
 
 extern "C"
-void drawCallback()
-{
+void drawCallback() {
   g_CurrentInstance->display();
 }
 
@@ -16,7 +15,12 @@ void reshapeCallback(int width, int height) {
 
 extern "C"
 void keyboardCallback(unsigned char key, int x, int y) {
-  g_CurrentInstance->keyboard(key, x ,y);
+  g_CurrentInstance->keyboard(key, x, y);
+}
+
+extern "C"
+void mouseCallback(int button, int state, int x, int y) {
+  g_CurrentInstance->mouse(button, state, x, y);
 }
 
 extern "C"

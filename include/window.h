@@ -6,7 +6,6 @@
 #include <string.h>
 #include <math.h>
 
-
 #define NPOLYGON 4
 #define PHI 3.141572
 #define ZERO 0.00001;
@@ -37,10 +36,11 @@ public:
   void display();
   void reshape(int width, int height);
   void keyboard(unsigned char key, int x, int y);
-  void render();
+  void mouse(int button, int state, int x, int y);
+  void handleMenuEvents(int option);
   void handleSubMenu1Events(int option);
   void handleSubMenu2Events(int option);
-  void handleMenuEvents(int option);
+  void render();
 
 };
 

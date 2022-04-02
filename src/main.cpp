@@ -1,10 +1,6 @@
 #ifndef __MAIN_H__
 #define __MAIN_H__
 
-#include <iostream>
-#include <math.h>
-#include <string.h>
-
 #include "../include/window.h"
 
 int main(int argc, char** argv)

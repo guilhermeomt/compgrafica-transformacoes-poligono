@@ -50,17 +50,18 @@ void Window::args()
 
 void Window::init()
 {
-  float ang, gAng;
+  int i;
 
-  for (int i = 0; i < NPOLYGON; i++)
+  _hasPolygon = false;
+  pvertex->n_vertex = 0;   // zero pontos
+  _polygonType = GL_POINTS;
+
+  for (i = 0; i < MAXVERTEXS; i++)
   {
-    ang = (float)(i) * (2.0 * PHI) / ((float)(NPOLYGON));
-    pvertex[i].v[0] = (float)(70.0 * cos(ang));
-    pvertex[i].v[1] = (float)(70.0 * sin(ang));
-    pvertex[i].v[2] = (float)0.0;
+    pvertex[i].v[0] = 0.0f;
+    pvertex[i].v[1] = 0.0f;
+    pvertex[i].v[2] = 0.0f;
   }
-
-  gAng = (2.0f * PHI) / 180.0f;
 }
 
 void Window::plotAxis()
@@ -89,16 +90,15 @@ void Window::drawPolygon()
 
   glColor3f(0.0, 0.0, 0.0);
 
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  glPolygonMode(GL_FRONT_AND_BACK, _polygonType);
 
-  glBegin(GL_POLYGON);
-  for (i = 0; i < NPOLYGON; i += 1)
+  glBegin(_polygonType);
+  for (i = 0; i < pvertex->n_vertex; i += 1)
   {
     glVertex2fv(pvertex[i].v);
   }
   glEnd();
 }
-
 
 void Window::display()
 {
@@ -143,22 +143,47 @@ void Window::keyboard(unsigned char key, int x, int y)
   }
 }
 
+void Window::mouse(int button, int state, int x, int y)
+{
+  if (state == GLUT_UP)
+  {
+    std::cout << "Polygon: " << std::boolalpha << _hasPolygon << std::endl;
+    if (button == GLUT_LEFT_BUTTON)
+    {
+      if (_hasPolygon == 0)
+      {
+        x = x - (_width / 2);
+        y = (_height / 2) - y;
+
+        glPointSize(3);
+
+        pvertex[pvertex->n_vertex].v[0] = (float)x;
+        pvertex[pvertex->n_vertex].v[1] = (float)y;
+        pvertex->n_vertex++;
+      }
+    }
+    else
+      if (button == GLUT_RIGHT_BUTTON)
+      {
+        if (pvertex->n_vertex > 0)
+        {
+          _hasPolygon = 1;
+          _polygonType = GL_LINE;
+        }
+      }
+  }
+  glutPostRedisplay();
+}
 
 void Window::handleMenuEvents(int option)
 {
   switch (option)
   {
-  case 1:
-    if (_polygonType == GL_LINE)
-      _polygonType = GL_FILL;
-    else
-      _polygonType = GL_LINE;
-    break;
-  case 5:
+  case 0:
     init();
     break;
   }
-    glutPostRedisplay();
+  glutPostRedisplay();
 }
 
 void Window::handleSubMenu1Events(int option)
@@ -196,7 +221,7 @@ void Window::createGLUTMenus()
   glutAddMenuEntry("Cisalhamento", 4);
 
   menu = glutCreateMenu(handleMenuEventsCallback);
-  glutAddMenuEntry("Limpar", 5);
+  glutAddMenuEntry("Limpar", 0);
   glutAddSubMenu("Objetos", submenu1);
   glutAddSubMenu("Transformacoes", submenu2);
   glutAttachMenu(GLUT_RIGHT_BUTTON);
@@ -210,6 +235,8 @@ void Window::render()
   glutReshapeFunc(reshapeCallback);
   glutDisplayFunc(drawCallback);
   glutKeyboardFunc(keyboardCallback);
+
+  glutMouseFunc(mouseCallback);
 
   createGLUTMenus();
 
