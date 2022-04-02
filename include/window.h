@@ -1,17 +1,31 @@
+#include "GL/glut.h"
+#include <string.h>
+
+
 #ifndef __WINDOW_H__
 #define __WINDOW_H__
 
 class Window {
 private:
-  int m_windX;
-  int m_windY;
+  int _height;
+  int _width;
+  const char* _title;
+  int _argc;
+  char** _argv;
+  GLenum _doubleBuffer;
+
+  void initGLUT(int argc, char** argv);
+  void args(int argc, char** argv);
+  void init();
+  void plotAxis();
 
 public:
-  Window(int x, int y);
+  Window() {};
+  Window(const char* title, int argc, char** argv);
   ~Window();
-  void draw();
-
-
+  void display();
+  void render();
 };
+
 
 #endif // __WINDOW_H__
