@@ -1,3 +1,6 @@
+#ifndef __MAIN_H__
+#define __MAIN_H__
+
 #include <iostream>
 #include <math.h>
 #include <string.h>
@@ -10,3 +13,5 @@ int main(int argc, char** argv)
   window.render();
   return (0);
 }
+
+#endif // __MAIN_H__
