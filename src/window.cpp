@@ -171,6 +171,9 @@ void Window::motion(int x, int y) {
     case 3:
       Transformation::scale(pvertex, _gVert, dx, dy);
       break;
+    case 4:
+      Transformation::shear(pvertex, _gVert, dx, dy);
+      break;
     }
     display();
   }

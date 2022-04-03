@@ -84,3 +84,36 @@ void Transformation::scale(struct Polygon(&pvertex)[MAXVERTEXS], int gVert, floa
 
   delete gCen;
 }
+
+void Transformation::shear(struct Polygon(&pvertex)[MAXVERTEXS], int gVert, float dx, float dy)
+{
+  int i;
+  float sx, sy, xy[3], * gCen;
+
+  sx = 0.001f * dx;
+  sy = 0.001f * dy;
+  if (dx > dy)
+  {
+    if (fabs(pvertex[gVert].v[0]) > 0.1f)
+      sx = dx / pvertex[gVert].v[0];
+  }
+  else
+  {
+    if (fabs(pvertex[gVert].v[1]) > 0.1f)
+      sy = dy / pvertex[gVert].v[1];
+  }
+
+  gCen = calculateCenter(pvertex);
+  translateCenter(pvertex, gCen, -1);
+
+  for (i = 0; i < pvertex->n_vertex; i++) {
+    xy[0] = pvertex[i].v[0];
+    xy[1] = pvertex[i].v[1];
+    pvertex[i].v[0] = xy[0] + xy[1] * sx;
+    pvertex[i].v[1] = xy[0] * sy + xy[1];
+  }
+
+  translateCenter(pvertex, gCen, 1);
+
+  delete gCen;
+}

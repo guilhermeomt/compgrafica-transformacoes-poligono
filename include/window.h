@@ -47,6 +47,4 @@ public:
 
 };
 
-
-
 #endif // __WINDOW_H__
