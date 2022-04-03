@@ -20,7 +20,6 @@ float* calculateCenter(struct Polygon(&pvertex)[MAXVERTEXS])
 void translateCenter(struct Polygon pvertex[MAXVERTEXS], float* gCen, int t)
 {
   int i;
-  // translada para centro
   for (i = 0; i < pvertex->n_vertex; i++) {
     pvertex[i].v[0] += (t * gCen[0]);
     pvertex[i].v[1] += (t * gCen[1]);
@@ -57,6 +56,7 @@ void Transformation::rotate(struct Polygon(&pvertex)[MAXVERTEXS], int gVert, flo
     pvertex[i].v[0] = xy[0] * cos(theta) - xy[1] * sin(theta);
     pvertex[i].v[1] = xy[0] * sin(theta) + xy[1] * cos(theta);
   }
+
   translateCenter(pvertex, gCen, 1);
 
   delete gCen;
@@ -116,4 +116,23 @@ void Transformation::shear(struct Polygon(&pvertex)[MAXVERTEXS], int gVert, floa
   translateCenter(pvertex, gCen, 1);
 
   delete gCen;
+}
+
+void Transformation::reflect(struct Polygon(&pvertex)[MAXVERTEXS], float dx, float dy)
+{
+  int i;
+  if (dx > 100.0f || dx < -100.0f)
+  {
+    for (i = 0; i < pvertex->n_vertex; i++) {
+      pvertex[i].v[0] *= -1;
+      pvertex[i].v[1] *= 1;
+    }
+  }
+  if (dy > 100.0f || dy < -100.0f)
+  {
+    for (i = 0; i < pvertex->n_vertex; i++) {
+      pvertex[i].v[0] *= 1;
+      pvertex[i].v[1] *= -1;
+    }
+  }
 }

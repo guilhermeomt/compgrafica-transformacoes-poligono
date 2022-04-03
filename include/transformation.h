@@ -16,7 +16,7 @@ public:
   static void rotate(struct Polygon(&pvertex)[MAXVERTEXS], int gVert, float dx, float dy);
   static void scale(struct Polygon(&pvertex)[MAXVERTEXS], int gVert, float dx, float dy);
   static void shear(struct Polygon(&pvertex)[MAXVERTEXS], int gVert, float dx, float dy);
-  // static void reflect(float dx, float dy);
+  static void reflect(struct Polygon(&pvertex)[MAXVERTEXS], float dx, float dy);
 };
 
 

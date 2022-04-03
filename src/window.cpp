@@ -174,6 +174,9 @@ void Window::motion(int x, int y) {
     case 4:
       Transformation::shear(pvertex, _gVert, dx, dy);
       break;
+    case 5:
+      Transformation::reflect(pvertex, dx, dy);
+      break;
     }
     display();
   }
@@ -264,6 +267,7 @@ void Window::createGLUTMenus()
   glutAddMenuEntry("Rotacao", 2);
   glutAddMenuEntry("Escala", 3);
   glutAddMenuEntry("Cisalhamento", 4);
+  glutAddMenuEntry("Espelho", 5);
 
   menu = glutCreateMenu(handleMenuEventsCallback);
   glutAddMenuEntry("Limpar", 0);
