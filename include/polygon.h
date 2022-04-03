@@ -7,7 +7,8 @@ struct Polygon
 {
   float v[3];
   int n_vertex;
-} pvertex[MAXVERTEXS];
+};
+
 
 
 #endif // __POLYGON_H__

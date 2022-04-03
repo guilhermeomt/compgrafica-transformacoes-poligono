@@ -19,6 +19,11 @@ void keyboardCallback(unsigned char key, int x, int y) {
 }
 
 extern "C"
+void motionCallback(int x, int y) {
+  g_CurrentInstance->motion(x, y);
+}
+
+extern "C"
 void mouseCallback(int button, int state, int x, int y) {
   g_CurrentInstance->mouse(button, state, x, y);
 }
@@ -36,4 +41,5 @@ extern "C"
 void handleSubMenu2EventsCallback(int option) {
   g_CurrentInstance->handleSubMenu2Events(option);
 }
+
 #endif // __WINDOW_CALLBACK_H__

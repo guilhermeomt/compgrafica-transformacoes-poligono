@@ -6,6 +6,9 @@
 #include <string.h>
 #include <math.h>
 
+#include "polygon.h"
+#include "transformation.h"
+
 #define NPOLYGON 4
 #define PHI 3.141572
 #define ZERO 0.00001;
@@ -21,6 +24,8 @@ private:
   int _polygonType;
   bool _hasPolygon;
   int _gOperation;
+  int _gVert;
+  struct Polygon pvertex[MAXVERTEXS];
 
   void initGLUT();
   void args();
@@ -28,6 +33,7 @@ private:
   void plotAxis();
   void drawPolygon();
   void createGLUTMenus();
+  void clipVertex(int x, int y);
 
 public:
   Window() {};
@@ -36,6 +42,7 @@ public:
   void display();
   void reshape(int width, int height);
   void keyboard(unsigned char key, int x, int y);
+  void motion(int x, int y);
   void mouse(int button, int state, int x, int y);
   void handleMenuEvents(int option);
   void handleSubMenu1Events(int option);
@@ -43,6 +50,7 @@ public:
   void render();
 
 };
+
 
 
 #endif // __WINDOW_H__

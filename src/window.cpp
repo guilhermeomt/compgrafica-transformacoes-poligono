@@ -6,6 +6,7 @@ Window::Window(const char* title, int argc, char** argv) : _title(title), _argc(
 {
   _width = 600;
   _height = 500;
+  _gVert = -1;
 }
 
 Window::~Window()
@@ -53,7 +54,7 @@ void Window::init()
   int i;
 
   _hasPolygon = false;
-  pvertex->n_vertex = 0;   // zero pontos
+  pvertex->n_vertex = 0;
   _polygonType = GL_POINTS;
 
   for (i = 0; i < MAXVERTEXS; i++)
@@ -109,6 +110,14 @@ void Window::display()
 
   drawPolygon();
 
+  if (_gVert > -1) {
+    glColor3f(1.0, 0.0, 0.0);
+    glPointSize(3);
+    glBegin(GL_POINTS);
+    glVertex2fv(pvertex[_gVert].v);
+    glEnd();
+  }
+
   if (_doubleBuffer)
   {
     glutSwapBuffers();
@@ -143,11 +152,39 @@ void Window::keyboard(unsigned char key, int x, int y)
   }
 }
 
+void Window::motion(int x, int y) {
+  int i;
+  float dx, dy;
+  if (_gVert > -1) {
+    x = x - (_width / 2);
+    y = (_height / 2) - y;
+    dx = x - pvertex[_gVert].v[0];
+    dy = y - pvertex[_gVert].v[1];
+    switch (_gOperation)
+    {
+    case 1:
+      Transformation::translate(pvertex, dx, dy);
+      break;
+    }
+    display();
+  }
+}
+
 void Window::mouse(int button, int state, int x, int y)
 {
+  if (button == GLUT_LEFT)
+  {
+    if (state == GLUT_DOWN)
+    {
+      x = x - (_width / 2);
+      y = (_height / 2) - y;
+      clipVertex(x, y);
+    }
+  }
   if (state == GLUT_UP)
   {
     std::cout << "Polygon: " << std::boolalpha << _hasPolygon << std::endl;
+    _gVert = -1;
     if (button == GLUT_LEFT_BUTTON)
     {
       if (_hasPolygon == 0)
@@ -205,7 +242,6 @@ void Window::handleSubMenu2Events(int option)
   glutPostRedisplay();
 }
 
-
 void Window::createGLUTMenus()
 {
   int menu, submenu1, submenu2;
@@ -227,6 +263,20 @@ void Window::createGLUTMenus()
   glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
+void Window::clipVertex(int x, int y)
+{
+  int i;
+  float d;
+  _gVert = -1;
+  for (i = 0; i < pvertex->n_vertex; i++) {
+    d = sqrt(pow((pvertex[i].v[0] - x), 2.0) + pow((pvertex[i].v[1] - y), 2.0));
+    if (d < 3.0) {
+      _gVert = i;
+      break;
+    }
+  }
+}
+
 void Window::render()
 {
   initGLUT();
@@ -236,6 +286,7 @@ void Window::render()
   glutDisplayFunc(drawCallback);
   glutKeyboardFunc(keyboardCallback);
 
+  glutMotionFunc(motionCallback);
   glutMouseFunc(mouseCallback);
 
   createGLUTMenus();
