@@ -14,7 +14,7 @@ public:
 
   static void translate(struct Polygon(&pvertex)[MAXVERTEXS], float dx, float dy);
   static void rotate(struct Polygon(&pvertex)[MAXVERTEXS], int gVert, float dx, float dy);
-  // static void scale(float dx, float dy);
+  static void scale(struct Polygon(&pvertex)[MAXVERTEXS], int gVert, float dx, float dy);
   // static void shear(float dx, float dy);
   // static void reflect(float dx, float dy);
 };

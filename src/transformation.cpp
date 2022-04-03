@@ -61,3 +61,26 @@ void Transformation::rotate(struct Polygon(&pvertex)[MAXVERTEXS], int gVert, flo
 
   delete gCen;
 }
+
+void Transformation::scale(struct Polygon(&pvertex)[MAXVERTEXS], int gVert, float dx, float dy)
+{
+  int i;
+  float sx, sy, * gCen;
+
+  gCen = calculateCenter(pvertex);
+  translateCenter(pvertex, gCen, -1);
+
+  sx = sy = 1.0f;
+  if (fabs(pvertex[gVert].v[0]) > 0.01f)
+    sx = 1.0f + dx / pvertex[gVert].v[0];
+  if (fabs(pvertex[gVert].v[1]) > 0.01f)
+    sy = 1.0f + dy / pvertex[gVert].v[1];
+  for (i = 0; i < pvertex->n_vertex; i++) {
+    pvertex[i].v[0] *= sx;
+    pvertex[i].v[1] *= sy;
+  }
+
+  translateCenter(pvertex, gCen, 1);
+
+  delete gCen;
+}

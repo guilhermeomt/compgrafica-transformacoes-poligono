@@ -168,6 +168,9 @@ void Window::motion(int x, int y) {
     case 2:
       Transformation::rotate(pvertex, _gVert, dx, dy);
       break;
+    case 3:
+      Transformation::scale(pvertex, _gVert, dx, dy);
+      break;
     }
     display();
   }
