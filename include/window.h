@@ -9,10 +9,6 @@
 #include "polygon.h"
 #include "transformation.h"
 
-#define NPOLYGON 4
-#define PHI 3.141572
-#define ZERO 0.00001;
-
 class Window {
 private:
   int _height;

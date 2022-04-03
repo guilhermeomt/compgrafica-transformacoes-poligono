@@ -9,6 +9,4 @@ struct Polygon
   int n_vertex;
 };
 
-
-
 #endif // __POLYGON_H__
