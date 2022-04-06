@@ -9,6 +9,10 @@
 #include "polygon.h"
 #include "transformation.h"
 
+#define WINDOW_WIDTH 600
+#define WINDOW_HEIGHT 500
+
+
 class Window {
 private:
   int _height;
@@ -21,7 +25,7 @@ private:
   bool _hasPolygon;
   int _gOperation;
   int _gVert;
-  struct Polygon pvertex[MAXVERTEXS];
+  struct Polygon _pvertex[MAXVERTEXS];
 
   void initGLUT();
   void args();

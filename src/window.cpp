@@ -4,8 +4,8 @@
 
 Window::Window(const char* title, int argc, char** argv) : _title(title), _argc(argc), _argv(argv)
 {
-  _width = 600;
-  _height = 500;
+  _width = WINDOW_WIDTH;
+  _height = WINDOW_HEIGHT;
   _gVert = -1;
 }
 
@@ -54,14 +54,14 @@ void Window::init()
   int i;
 
   _hasPolygon = false;
-  pvertex->n_vertex = 0;
+  _pvertex->n_vertex = 0;
   _polygonType = GL_POINTS;
 
   for (i = 0; i < MAXVERTEXS; i++)
   {
-    pvertex[i].v[0] = 0.0f;
-    pvertex[i].v[1] = 0.0f;
-    pvertex[i].v[2] = 0.0f;
+    _pvertex[i].v[0] = 0.0f;
+    _pvertex[i].v[1] = 0.0f;
+    _pvertex[i].v[2] = 0.0f;
   }
 }
 
@@ -94,9 +94,9 @@ void Window::drawPolygon()
   glPolygonMode(GL_FRONT_AND_BACK, _polygonType);
 
   glBegin(_polygonType);
-  for (i = 0; i < pvertex->n_vertex; i += 1)
+  for (i = 0; i < _pvertex->n_vertex; i += 1)
   {
-    glVertex2fv(pvertex[i].v);
+    glVertex2fv(_pvertex[i].v);
   }
   glEnd();
 }
@@ -114,7 +114,7 @@ void Window::display()
     glColor3f(1.0, 0.0, 0.0);
     glPointSize(3);
     glBegin(GL_POINTS);
-    glVertex2fv(pvertex[_gVert].v);
+    glVertex2fv(_pvertex[_gVert].v);
     glEnd();
   }
 
@@ -153,29 +153,28 @@ void Window::keyboard(unsigned char key, int x, int y)
 }
 
 void Window::motion(int x, int y) {
-  int i;
   float dx, dy;
   if (_gVert > -1) {
     x = x - (_width / 2);
     y = (_height / 2) - y;
-    dx = x - pvertex[_gVert].v[0];
-    dy = y - pvertex[_gVert].v[1];
+    dx = x - _pvertex[_gVert].v[0];
+    dy = y - _pvertex[_gVert].v[1];
     switch (_gOperation)
     {
     case 1:
-      Transformation::translate(pvertex, dx, dy);
+      Transformation::translate(_pvertex, dx, dy);
       break;
     case 2:
-      Transformation::rotate(pvertex, _gVert, dx, dy);
+      Transformation::rotate(_pvertex, _gVert, dx, dy);
       break;
     case 3:
-      Transformation::scale(pvertex, _gVert, dx, dy);
+      Transformation::scale(_pvertex, _gVert, dx, dy);
       break;
     case 4:
-      Transformation::shear(pvertex, _gVert, dx, dy);
+      Transformation::shear(_pvertex, _gVert, dx, dy);
       break;
     case 5:
-      Transformation::reflect(pvertex, dx, dy);
+      Transformation::reflect(_pvertex, dx, dy);
       break;
     }
     display();
@@ -206,15 +205,15 @@ void Window::mouse(int button, int state, int x, int y)
 
         glPointSize(3);
 
-        pvertex[pvertex->n_vertex].v[0] = (float)x;
-        pvertex[pvertex->n_vertex].v[1] = (float)y;
-        pvertex->n_vertex++;
+        _pvertex[_pvertex->n_vertex].v[0] = (float)x;
+        _pvertex[_pvertex->n_vertex].v[1] = (float)y;
+        _pvertex->n_vertex++;
       }
     }
     else
       if (button == GLUT_RIGHT_BUTTON)
       {
-        if (pvertex->n_vertex > 0)
+        if (_pvertex->n_vertex > 0)
         {
           _hasPolygon = 1;
           _polygonType = GL_LINE;
@@ -281,8 +280,8 @@ void Window::clipVertex(int x, int y)
   int i;
   float d;
   _gVert = -1;
-  for (i = 0; i < pvertex->n_vertex; i++) {
-    d = sqrt(pow((pvertex[i].v[0] - x), 2.0) + pow((pvertex[i].v[1] - y), 2.0));
+  for (i = 0; i < _pvertex->n_vertex; i++) {
+    d = sqrt(pow((_pvertex[i].v[0] - x), 2.0) + pow((_pvertex[i].v[1] - y), 2.0));
     if (d < 3.0) {
       _gVert = i;
       break;
