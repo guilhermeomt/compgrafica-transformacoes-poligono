@@ -13,11 +13,13 @@ public:
   Matrix();
   ~Matrix();
   Matrix(int rows, int cols);
+  Matrix(float v[3]);
 
   inline int rows() const { return _rows; }
   inline int cols() const { return _cols; }
 
   static Matrix identity(int rows, int cols);
+  static float* to_array(const Matrix& m);
 
   void set(int row, int col, float value) {
     values[row][col] = value;

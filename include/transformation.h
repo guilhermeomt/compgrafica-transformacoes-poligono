@@ -2,7 +2,10 @@
 #define __TRANSFORMATION_H__
 
 #include <iostream>
+#include <cstdint>
+#include <cstring>
 #include <math.h>
+#include "matrix.h"
 
 #define PHI 3.141572
 #define ZERO 0.00001;

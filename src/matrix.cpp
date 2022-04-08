@@ -22,15 +22,34 @@ Matrix::Matrix(int rows, int cols) {
   }
 }
 
-Matrix Matrix::identity(int rows, int cols) {
-    Matrix result(rows, cols);
-    for (int i = 0; i < rows; i++) {
-      for (int j = 0; j < cols; j++) {
-        result.set(i, j, (i == j) ? 1 : 0);
-      }
-    }
-    return result;
+Matrix::Matrix(float v[3]) {
+  _rows = 3;
+  _cols = 1;
+  values = new float* [3];
+  for (int i = 0; i < 3; i++) {
+    values[i] = new float[1];
+    values[i][0] = v[i];
   }
+  values[2][0] = 1;
+}
+
+Matrix Matrix::identity(int rows, int cols) {
+  Matrix result(rows, cols);
+  for (int i = 0; i < rows; i++) {
+    for (int j = 0; j < cols; j++) {
+      result.set(i, j, (i == j) ? 1 : 0);
+    }
+  }
+  return result;
+}
+
+float* Matrix::to_array(const Matrix& m) {
+  float* result = new float[3];
+  for (int i = 0; i < 3; i++) {
+    result[i] = m.get(i, 0);
+  }
+  return result;
+}
 
 Matrix Matrix::operator*(const Matrix& other) const {
   Matrix result(_rows, other.cols());

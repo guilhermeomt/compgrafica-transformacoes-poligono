@@ -12,7 +12,6 @@
 #define WINDOW_WIDTH 600
 #define WINDOW_HEIGHT 500
 
-
 class Window {
 private:
   int _height;
