@@ -99,17 +99,15 @@ void Transformation::shear(struct Polygon(&pvertex)[MAXVERTEXS], int gVert, floa
   int i;
   float sx, sy, xy[3], * gCen;
 
-  sx = 0.001f * dx;
-  sy = 0.001f * dy;
   if (dx > dy)
   {
     if (fabs(pvertex[gVert].v[0]) > 0.1f)
-      sx = dx / pvertex[gVert].v[0];
+      sx = dx / pvertex[gVert].v[1];
   }
   else
   {
     if (fabs(pvertex[gVert].v[1]) > 0.1f)
-      sy = dy / pvertex[gVert].v[1];
+      sy = dy / pvertex[gVert].v[0];
   }
 
   gCen = calculateCenter(pvertex);
